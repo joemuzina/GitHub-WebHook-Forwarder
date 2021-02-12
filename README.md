@@ -6,3 +6,4 @@ GitHub's 'push' webhook requests make no distinction between branches, so commit
 2. Execute `npm i` in the project directory to install dependencies.
 3. Open `config.js` and insert your Repo details, webhook URL, and secret key. Make sure you include "/github" at the end of the webhook URL.
 4. Start the app with `node app.js`.
+5. All webhook requests sent to `yourWebaddress:port/gitPayload` will now be forwarded (except for pushes to secondary branches!)
