@@ -1,0 +1,39 @@
+{
+  "name": "parse-github-payload",
+  "version": "0.1.1",
+  "description": "Parses a github push event payload adding a list of files added, modified and removed to the payload",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js | node_modules/.bin/tap-spec",
+    "doc": "dox -r < index.js | doxme --readme > README.md"
+  },
+  "keywords": [
+    "github",
+    "webhooks"
+  ],
+  "author": "Gregor MacLennan",
+  "license": "MIT",
+  "devDependencies": {
+    "dox": "^0.6.1",
+    "doxme": "^1.8.1",
+    "tap-spec": "^2.1.2",
+    "tape": "^3.0.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "clone": "^0.2.0",
+    "crypto": "^1.0.1",
+    "defaults": "^1.0.0",
+    "express": "^4.17.1",
+    "logger": "0.0.1",
+    "request": "^2.88.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/digidem/parse-github-payload.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digidem/parse-github-payload/issues"
+  },
+  "homepage": "https://github.com/digidem/parse-github-payload"
+}
