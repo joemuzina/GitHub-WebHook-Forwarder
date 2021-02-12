@@ -32,15 +32,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 function correctKey(req) {
-    const bodyString = Buffer.from(req.rawBody, 'utf8')
-    let hashReceived = req.headers["x-hub-signature-256"].slice(7);
+    if (req.rawBody != null) {
+        if ((typeof(req.rawBody != "string")) && (typeof(req.rawBody != "Buffer"))) {
+            const bodyString = Buffer.from(req.rawBody, 'utf8')
+            let hashReceived = req.headers["x-hub-signature-256"].slice(7);
 
-    let hmac = crypto.createHmac('sha256', SECRET);
-    hmac.update(bodyString);
+            let hmac = crypto.createHmac('sha256', SECRET);
+            hmac.update(bodyString);
 
-    let hashCheck = hmac.digest('hex');
+            let hashCheck = hmac.digest('hex');
 
-    return (hashReceived == hashCheck);
+            return (hashReceived == hashCheck);
+        }
+    }
 }
 
 function validateReq(req) {
@@ -101,7 +105,7 @@ function eventType(head) {
     return head["x-github-event"];
 }
 
-function shouldForward(req) {
+function shouldForward(req, res) {
     let reqValidationResponse = validateReq(req);
 
     if (reqValidationResponse == true) {
@@ -110,7 +114,7 @@ function shouldForward(req) {
                 return true;
             }
             else {
-                res.write(reqValidationResponse);
+                res.write(String(reqValidationResponse));
                 return false;
             }
         }
@@ -130,7 +134,7 @@ function forwardRequest(req, res) {
 app.post(
     '/gitPayload',
     function(req, res) {
-        if (shouldForward(req)) {
+        if (shouldForward(req, res)) {
             forwardRequest(req, res);
         }
         else {
