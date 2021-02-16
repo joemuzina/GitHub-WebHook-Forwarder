@@ -18,6 +18,8 @@ if (SECRET == "") {
 const express = require('express');
 const app = express();
 const crypto = require('crypto');
+var http = require('http');
+var request = require('request');
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.json({verify:function(req,res,buf){req.rawBody=buf}}))
@@ -30,6 +32,23 @@ app.listen(port);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const discordPost = (h,b) => {
+    h["host"] = "discord.com";
+
+    request({
+        url: FORWARD,
+        method: 'POST',
+        json: true,
+        headers: h,
+        body: b
+    }, function(error, response, body) {
+        console.log('Discord message sent.');
+        //console.log("err: ", error);
+        console.log("res: ", response);
+        //console.log("body: ", body);
+    });
+}
 
 function correctKey(req) {
     if (req.rawBody != null) {
@@ -128,7 +147,8 @@ function shouldForward(req, res) {
 
 // Forward the webhook request to the desired target
 function forwardRequest(req, res) {
-    res.redirect(307, FORWARD);
+    discordPost(req.headers, req.body);
+    //res.redirect(302, FORWARD);
 }
 
 app.post(
